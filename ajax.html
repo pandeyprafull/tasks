@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax call</title>
+    <script>
+        function createImage(url) {
+            var img = document.createElement("img");
+            img.src = url;
+            return img;
+        }
+
+        function printData(arr) {
+            var div = document.querySelector("#result");
+            div.innerHTML = "";
+            arr.forEach(obj => {
+                var url = obj.images.original.url;
+                div.appendChild(createImage(url));
+            })
+        }
+        function ajaxCall() {
+            var searchVal = document.querySelector("#search").value;
+            const url = `http://api.giphy.com/v1/gifs/search?q=${searchVal}&api_key=MpMQM4Qq4vv0VI7OD7eanWNPInXlEuLu&limit=5`
+          //  const url = `http://api.giphy.com/v1/gifs/search?q=${searchVal}&api_key=MpMQM4Qq4vv0VI7OD7eanWNPInXlEuLu&limit=5`
+            var myPromise = fetch(url)
+            myPromise.then(response => {
+                response.json().then(data => {
+                    printData(data.data);
+                    console.log("Data is ", data);
+
+                }).catch(e => {
+                    console.log("Error in JSON", e);
+                })
+            }).catch(err => {
+
+                console.log("server error ", err);
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+    <input id="search" type="text" placeholder="Search gif here">
+    <br>
+
+    <button onclick="ajaxCall()"> Search </button>
+    <div id="#result"></div>
+
+</body>
+
+</html>
